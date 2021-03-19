@@ -14,7 +14,7 @@ $lname = mysqli_real_escape_string($mysqli, $_POST['lname']);
 $email = mysqli_real_escape_string($mysqli, $_POST['email']);
 $password = mysqli_real_escape_string($mysqli, $_POST['password']);
 
-
+//VALIDACION  
 //chequeo que cada input tenga un nro minimo de caracteres.
 if (strlen($fname) < 2) {
     echo "fname";
@@ -32,17 +32,19 @@ if (strlen($fname) < 2) {
 } else {
 
     //encripto el pass
-    $password = password_hash($password, PASSWORD_BCRYPT, array('cost' => 12));
+    $spassword = password_hash($password, PASSWORD_BCRYPT, array('cost' => 12));
 
     $query = "SELECT * FROM members WHERE email='$email'";
-    $result = mysqli_query($mysqli, $query) or die(mysqli_error($mysqli));
+    $result = mysqli_query($mysqli, $query) or die(mysqli_error());
     $num_row = mysqli_num_rows($result);
     $row = mysqli_fetch_array($result);
 
     if ($num_row < 1) {
-        $insert_row = $mysqli->query("INSERT INTO members (fname, lname, email, password) VALUES ('$fname', '$lname', '$email', '$password')");
+
+        $insert_row = $mysqli->query("INSERT INTO members (fname, lname, email, password) VALUES ('$fname', '$lname', '$email', '$spassword')");
 
         if ($insert_row) {
+
             $_SESSION['login'] = $mysqli->insert_id;
             $_SESSION['fname'] = $fname;
             $_SESSION['lname'] = $lname;
@@ -50,11 +52,11 @@ if (strlen($fname) < 2) {
             echo 'true';
         }
     } else {
+
         echo 'false';
     }
 } */
 ?>
-
 <?php
 session_start();
 
